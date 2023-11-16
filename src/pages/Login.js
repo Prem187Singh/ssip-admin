@@ -3,10 +3,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 import { useContext, useEffect, useState } from 'react';
 import { Store } from '..//context/store';
-
-import styles from "../pages/Login.module.css";
-
 import base_url from '../base_url';
+import styles from "../pages/Login.module.css";
+import expireToken from "../global_function/unauthorizedToken"
+
 
 export default function Login(){
 
@@ -25,23 +25,36 @@ export default function Login(){
 
       e.preventDefault();
 
-      try {
-        const  data  = await Axios.post(`${base_url}/auth/api/login/`, {
+      Axios.post(`${base_url}/auth/api/login/`,{
         "email":  email,
-        "password":password        
-        });
-        ctxDispatch({ type: 'USER_SIGNIN', payload: data });
-        localStorage.setItem('userInfo', JSON.stringify(data));
+         "password":password        
+      })
+      .then((response)=>{
+        ctxDispatch({ type: 'USER_SIGNIN', payload: response });
+        localStorage.setItem('userInfo', JSON.stringify(response.data.access));
+        localStorage.setItem('refreshToken', JSON.stringify(response.data.refresh));
         
-    
-      } catch (err) {
-        {console.log(err)}
-      }
+        //console.log(response.data.refresh);
+      })
+      .catch((error)=>{
+        console.log(error);
+        if(error.response){
+            expireToken(localStorage.getItem('refreshToken'),(error,result)=>{
+              if(error){
+                console.log("someting went worng");
+              }
+              ctxDispatch({ type: 'USER_SIGNIN', payload: result });
+              localStorage.setItem('userInfo', JSON.stringify(result.data.access));
+              localStorage.setItem('refreshToken', JSON.stringify(result.data.refresh));
+            })
+        }
+      })
+
     };
   
     useEffect(() => {
       if (userInfo) {
-   
+        console.log(localStorage.getItem('refreshToken'));
       }
     }, [userInfo]);
   
