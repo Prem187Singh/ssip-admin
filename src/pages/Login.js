@@ -1,5 +1,6 @@
 import Axios from 'axios';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+//import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useContext, useEffect, useState } from 'react';
 import { Store } from '..//context/store';
@@ -10,10 +11,8 @@ import expireToken from "../global_function/unauthorizedToken"
 
 export default function Login(){
 
-  //  const navigate = useNavigate();
-  //  const { search } = useLocation();
-  //  const redirectInUrl = new URLSearchParams(search).get('redirect');
-  //  const redirect = redirectInUrl ? redirectInUrl : '/';
+    const navigate = useNavigate();
+  
   
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -33,12 +32,11 @@ export default function Login(){
         ctxDispatch({ type: 'USER_SIGNIN', payload: response });
         localStorage.setItem('userInfo', JSON.stringify(response.data.access));
         localStorage.setItem('refreshToken', JSON.stringify(response.data.refresh));
-        
-        //console.log(response.data.refresh);
+        navigate('/home')
       })
       .catch((error)=>{
         console.log(error);
-        if(error.response){
+        if(error.response.status === 401){
             expireToken(localStorage.getItem('refreshToken'),(error,result)=>{
               if(error){
                 console.log("someting went worng");
