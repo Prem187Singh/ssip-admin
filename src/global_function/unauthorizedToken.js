@@ -6,7 +6,11 @@ const expireToken = async (refreshToken,next)=>{
         "refresh":refreshToken
     })
     .then((response)=>{
+        localStorage.setItem('userInfo', JSON.stringify(response.data.access));
+        localStorage.setItem('refreshToken', JSON.stringify(response.data.refresh));
+
         return next(null,response)
+
     })
     .catch((error)=>{
         return next(error)

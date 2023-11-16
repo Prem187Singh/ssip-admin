@@ -3,23 +3,26 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { StoreProvider } from './context/store';
 
-import "./global.css";
 
 
 
 import "./global.css";
 import { BrowserRouter } from 'react-router-dom';
-import { StoreProvider } from './context/store';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <StoreProvider>
+    <StoreProvider>
+      <BrowserRouter>
+
         <App />
-      </StoreProvider>
-    </BrowserRouter>
+
+      </BrowserRouter>
+    </StoreProvider>
+
 
   </React.StrictMode>
 );

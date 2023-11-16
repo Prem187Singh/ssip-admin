@@ -30,8 +30,7 @@ export default function Login(){
       })
       .then((response)=>{
         ctxDispatch({ type: 'USER_SIGNIN', payload: response });
-        localStorage.setItem('userInfo', JSON.stringify(response.data.access));
-        localStorage.setItem('refreshToken', JSON.stringify(response.data.refresh));
+     
         navigate('/home')
       })
       .catch((error)=>{
