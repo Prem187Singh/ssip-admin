@@ -1,7 +1,7 @@
 import Axios from 'axios';
 //import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import PageAuth from '../global_function/PageAuth';
 import { useContext, useEffect, useState } from 'react';
 import { Store } from '..//context/store';
 import base_url from '../base_url';
@@ -14,6 +14,18 @@ export default function Login(){
     const navigate = useNavigate();
   
   
+
+    useEffect(()=>{
+    
+        
+        if (PageAuth()){
+            navigate('/home')
+        }
+     
+        
+    },[]);
+    
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
   
